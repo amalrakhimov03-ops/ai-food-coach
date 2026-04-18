@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#0d1117] text-white">
@@ -17,18 +19,27 @@ export default function HomePage() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4">
-            <a
+            <Link
               href="/login"
               className="rounded-xl bg-white px-5 py-3 text-sm font-medium text-black transition hover:opacity-90"
             >
-              Open Web App
-            </a>
+              Открыть Web App
+            </Link>
 
             <a
               href="#features"
               className="rounded-xl border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5"
             >
-              See Features
+              Смотреть возможности
+            </a>
+
+            <a
+              href="https://t.me/ai_coach_hse_bot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-xl border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition hover:bg-white/5"
+            >
+              Открыть Telegram
             </a>
           </div>
         </div>
@@ -40,15 +51,15 @@ export default function HomePage() {
       >
         {[
           {
-            title: 'Telegram + Voice',
-            text: 'Логируй питание через текст и голосовые сообщения.',
+            title: 'Telegram + Голос',
+            text: 'Логируй питание через текстовые и голосовые сообщения.',
           },
           {
-            title: 'LLM Analysis',
-            text: 'Gemini анализирует еду, калории и даёт рекомендации.',
+            title: 'AI-анализ',
+            text: 'Gemini анализирует еду, считает калории и даёт рекомендации.',
           },
           {
-            title: 'History & Dashboard',
+            title: 'История и Dashboard',
             text: 'Просматривай историю питания и персональную статистику.',
           },
         ].map((item) => (
