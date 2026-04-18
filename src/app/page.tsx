@@ -1,8 +1,19 @@
+'use client'
+
+import { useEffect } from "react"
+import { trackEvent } from "@/lib/analytics"
 import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
 export default function HomePage() {
+  // Трекаем просмотр страницы при загрузке
+  useEffect(() => {
+    trackEvent('landing_view', { 
+      referrer: document.referrer 
+    })
+  }, [])
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Header />
@@ -39,6 +50,7 @@ export default function HomePage() {
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row animate-slide-up animation-delay-200">
               <Link
                 href="/register"
+                onClick={() => trackEvent('cta_click', { location: 'hero', target: 'register' })}
                 className="group flex items-center gap-2 rounded-xl bg-accent px-6 py-4 text-base font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/20"
               >
                 Начать бесплатно
@@ -55,6 +67,7 @@ export default function HomePage() {
 
               <a
                 href="https://t.me/ai_coach_hse_bot"
+                onClick={() => trackEvent('cta_click', { location: 'hero', target: 'telegram' })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-4 text-base font-medium text-foreground transition-all hover:bg-muted hover:border-muted-foreground/30"
@@ -292,6 +305,7 @@ export default function HomePage() {
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/register"
+              onClick={() => trackEvent('cta_click', { location: 'footer', target: 'register' })}
               className="group flex items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/20"
             >
               Создать аккаунт бесплатно
@@ -307,6 +321,7 @@ export default function HomePage() {
             </Link>
             <a
               href="https://t.me/ai_coach_hse_bot"
+              onClick={() => trackEvent('cta_click', { location: 'footer', target: 'telegram' })}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 rounded-xl border border-border px-8 py-4 text-base font-medium text-foreground transition-all hover:bg-muted"
