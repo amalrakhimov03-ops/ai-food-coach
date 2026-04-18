@@ -1,8 +1,9 @@
-'use client'
+"use client"
 
-import { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { useEffect, useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { supabase } from "@/lib/supabase"
 
 type FoodLog = {
   id: string
@@ -19,14 +20,14 @@ type FoodLog = {
 }
 
 function formatDate(dateString: string | null) {
-  if (!dateString) return '—'
+  if (!dateString) return "—"
 
-  return new Date(dateString).toLocaleString('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  return new Date(dateString).toLocaleString("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   })
 }
 
@@ -35,22 +36,21 @@ function getDayKey(dateString: string | null) {
 
   const d = new Date(dateString)
   const year = d.getFullYear()
-  const month = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
+  const month = String(d.getMonth() + 1).padStart(2, "0")
+  const day = String(d.getDate()).padStart(2, "0")
 
   return `${year}-${month}-${day}`
 }
 
 function formatDayLabel(dayKey: string) {
-  const [year, month, day] = dayKey.split('-')
+  const [year, month, day] = dayKey.split("-")
   return `${day}.${month}.${year}`
 }
 
 export default function DashboardPage() {
   const router = useRouter()
 
-  const [email, setEmail] = useState('')
-  const [userId, setUserId] = useState('')
+  const [email, setEmail] = useState("")
   const [loading, setLoading] = useState(true)
   const [logs, setLogs] = useState<FoodLog[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -67,20 +67,19 @@ export default function DashboardPage() {
         } = await supabase.auth.getUser()
 
         if (userError || !user) {
-          router.push('/login')
+          router.push("/login")
           return
         }
 
-        setEmail(user.email || '')
-        setUserId(user.id)
+        setEmail(user.email || "")
 
         const { data, error: logsError } = await supabase
-          .from('food_logs')
+          .from("food_logs")
           .select(
-            'id, user_id, source, raw_text, meal_type, calories, protein, fat, carbs, logged_at, created_at'
+            "id, user_id, source, raw_text, meal_type, calories, protein, fat, carbs, logged_at, created_at"
           )
-          .eq('user_id', user.id)
-          .order('logged_at', { ascending: false })
+          .eq("user_id", user.id)
+          .order("logged_at", { ascending: false })
           .limit(100)
 
         if (logsError) {
@@ -91,7 +90,7 @@ export default function DashboardPage() {
 
         setLogs(data || [])
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Unknown error')
+        setError(e instanceof Error ? e.message : "Unknown error")
         setLogs([])
       } finally {
         setLoading(false)
@@ -123,9 +122,7 @@ export default function DashboardPage() {
       .sort((a, b) => b.date.localeCompare(a.date))
       .slice(0, 7)
 
-    const todayCalories = todayKey
-      ? (caloriesByDayMap.get(todayKey) || 0)
-      : 0
+    const todayCalories = todayKey ? caloriesByDayMap.get(todayKey) || 0 : 0
 
     const dailyCalories = Array.from(caloriesByDayMap.values())
     const averageDailyCalories =
@@ -136,9 +133,15 @@ export default function DashboardPage() {
           )
         : 0
 
-    const totalProtein = logs.reduce((sum, log) => sum + Number(log.protein || 0), 0)
+    const totalProtein = logs.reduce(
+      (sum, log) => sum + Number(log.protein || 0),
+      0
+    )
     const totalFat = logs.reduce((sum, log) => sum + Number(log.fat || 0), 0)
-    const totalCarbs = logs.reduce((sum, log) => sum + Number(log.carbs || 0), 0)
+    const totalCarbs = logs.reduce(
+      (sum, log) => sum + Number(log.carbs || 0),
+      0
+    )
 
     const avgProtein =
       totalMeals > 0 ? Math.round((totalProtein / totalMeals) * 10) / 10 : 0
@@ -160,122 +163,338 @@ export default function DashboardPage() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
-    router.push('/login')
+    router.push("/login")
   }
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#0d1117] text-white">
-        <p className="text-white/60">Loading dashboard...</p>
+      <main className="flex min-h-screen items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <svg
+            className="h-8 w-8 animate-spin text-accent"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+          <p className="text-muted-foreground">Загрузка данных...</p>
+        </div>
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen bg-[#0d1117] text-white">
-      <div className="mx-auto max-w-7xl px-6 py-8">
-        <div className="mb-8 flex items-start justify-between gap-4">
-          <div>
-            <p className="text-sm text-white/50">AI Food Coach</p>
-            <h1 className="mt-1 text-3xl font-semibold tracking-tight">
-              Dashboard
-            </h1>
-            <p className="mt-2 text-sm text-white/60">{email}</p>
-            <p className="mt-1 text-xs text-white/35 break-all">
-              user_id: {userId}
-            </p>
+    <main className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent">
+                <svg
+                  className="h-5 w-5 text-accent-foreground"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+              </div>
+              <span className="text-lg font-semibold text-foreground">
+                AI Food Coach
+              </span>
+            </Link>
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5"
-          >
-            Logout
-          </button>
+          <div className="flex items-center gap-4">
+            <div className="hidden items-center gap-2 sm:flex">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/20 text-sm font-medium text-accent">
+                {email.charAt(0).toUpperCase()}
+              </div>
+              <span className="text-sm text-muted-foreground">{email}</span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+              <span className="hidden sm:inline">Выйти</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-7xl px-6 py-8">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Добро пожаловать
+          </h1>
+          <p className="mt-2 text-muted-foreground">
+            Отслеживайте свой прогресс и контролируйте питание
+          </p>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-200">
-            Ошибка загрузки данных: {error}
+          <div className="mb-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-400">
+            <div className="flex items-center gap-2">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Ошибка загрузки данных: {error}
+            </div>
           </div>
         )}
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <p className="text-sm text-white/50">Meals logged</p>
-            <p className="mt-3 text-3xl font-semibold">{stats.totalMeals}</p>
-            <p className="mt-2 text-sm text-white/50">
-              Всего записей в food_logs
+        {/* Stats Grid */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-muted-foreground">
+                Сегодня
+              </p>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/20">
+                <svg
+                  className="h-5 w-5 text-accent"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                  />
+                </svg>
+              </span>
+            </div>
+            <p className="mt-4 text-3xl font-bold text-foreground">
+              {stats.todayCalories}
             </p>
+            <p className="mt-1 text-sm text-muted-foreground">калорий</p>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <p className="text-sm text-white/50">Average daily calories</p>
-            <p className="mt-3 text-3xl font-semibold">
+          <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-muted-foreground">
+                Среднее в день
+              </p>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/20">
+                <svg
+                  className="h-5 w-5 text-blue-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
+                </svg>
+              </span>
+            </div>
+            <p className="mt-4 text-3xl font-bold text-foreground">
               {stats.averageDailyCalories}
             </p>
-            <p className="mt-2 text-sm text-white/50">
-              Среднее количество калорий в день
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">калорий</p>
           </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <p className="text-sm text-white/50">Today calories</p>
-            <p className="mt-3 text-3xl font-semibold">{stats.todayCalories}</p>
-            <p className="mt-2 text-sm text-white/50">
-              Сумма калорий за сегодня
+          <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-muted-foreground">
+                Всего записей
+              </p>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/20">
+                <svg
+                  className="h-5 w-5 text-purple-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
+                </svg>
+              </span>
+            </div>
+            <p className="mt-4 text-3xl font-bold text-foreground">
+              {stats.totalMeals}
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">приёмов пищи</p>
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-muted-foreground">БЖУ</p>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/20">
+                <svg
+                  className="h-5 w-5 text-orange-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"
+                  />
+                </svg>
+              </span>
+            </div>
+            <div className="mt-4 flex items-baseline gap-2">
+              <span className="text-lg font-semibold text-foreground">
+                {stats.avgProtein}g
+              </span>
+              <span className="text-lg font-semibold text-foreground">
+                {stats.avgFat}g
+              </span>
+              <span className="text-lg font-semibold text-foreground">
+                {stats.avgCarbs}g
+              </span>
+            </div>
+            <p className="mt-1 text-sm text-muted-foreground">
+              среднее на запись
             </p>
           </div>
         </div>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <p className="text-sm text-white/50">Avg protein</p>
-            <p className="mt-3 text-2xl font-semibold">{stats.avgProtein} g</p>
-            <p className="mt-2 text-sm text-white/50">
-              Средний белок на запись
-            </p>
-          </div>
+        {/* Main Content Grid */}
+        <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          {/* Calories History */}
+          <section className="rounded-2xl border border-border bg-card p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">
+                  История калорий
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Последние 7 дней
+                </p>
+              </div>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted">
+                <svg
+                  className="h-5 w-5 text-muted-foreground"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+              </span>
+            </div>
 
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <p className="text-sm text-white/50">Avg fat</p>
-            <p className="mt-3 text-2xl font-semibold">{stats.avgFat} g</p>
-            <p className="mt-2 text-sm text-white/50">
-              Средний жир на запись
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <p className="text-sm text-white/50">Avg carbs</p>
-            <p className="mt-3 text-2xl font-semibold">{stats.avgCarbs} g</p>
-            <p className="mt-2 text-sm text-white/50">
-              Средние углеводы на запись
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-lg font-medium">Calories History</h2>
-            <p className="mt-2 text-sm text-white/60">
-              Последние 7 дней по сумме калорий
-            </p>
-
-            <div className="mt-4 space-y-3">
+            <div className="mt-6 space-y-3">
               {stats.caloriesHistory.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-white/10 p-4 text-sm text-white/40">
-                  У вас пока нет записей. Отправьте первое сообщение в Telegram-бота.
+                <div className="rounded-xl border border-dashed border-border p-6 text-center">
+                  <svg
+                    className="mx-auto h-12 w-12 text-muted-foreground/50"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <p className="mt-4 text-sm text-muted-foreground">
+                    У вас пока нет записей
+                  </p>
+                  <a
+                    href="https://t.me/ai_coach_hse_bot"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-accent hover:text-accent/80"
+                  >
+                    Начать в Telegram
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </a>
                 </div>
               ) : (
-                stats.caloriesHistory.map((item) => (
+                stats.caloriesHistory.map((item, index) => (
                   <div
                     key={item.date}
-                    className="flex items-center justify-between rounded-xl border border-white/10 bg-[#161b22] px-4 py-3"
+                    className="flex items-center justify-between rounded-xl border border-border bg-muted/50 px-4 py-3 transition-colors hover:bg-muted"
                   >
-                    <span className="text-sm text-white/70">
-                      {formatDayLabel(item.date)}
-                    </span>
-                    <span className="text-sm font-medium text-white">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-xs font-medium text-accent">
+                        {index + 1}
+                      </span>
+                      <span className="text-sm text-foreground">
+                        {formatDayLabel(item.date)}
+                      </span>
+                    </div>
+                    <span className="text-sm font-semibold text-foreground">
                       {item.calories} kcal
                     </span>
                   </div>
@@ -284,56 +503,132 @@ export default function DashboardPage() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-lg font-medium">Recent Activity</h2>
-            <p className="mt-2 text-sm text-white/60">
-              Последние записи о еде
-            </p>
+          {/* Recent Activity */}
+          <section className="rounded-2xl border border-border bg-card p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-foreground">
+                  Последние записи
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Недавняя активность
+                </p>
+              </div>
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted">
+                <svg
+                  className="h-5 w-5 text-muted-foreground"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </span>
+            </div>
 
-            <div className="mt-4 space-y-3">
+            <div className="mt-6 space-y-3">
               {logs.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-white/10 p-4 text-sm text-white/40">
-                  Пока данных нет
+                <div className="rounded-xl border border-dashed border-border p-6 text-center">
+                  <svg
+                    className="mx-auto h-12 w-12 text-muted-foreground/50"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                    />
+                  </svg>
+                  <p className="mt-4 text-sm text-muted-foreground">
+                    Пока данных нет
+                  </p>
                 </div>
               ) : (
-                logs.slice(0, 8).map((log) => (
+                logs.slice(0, 6).map((log) => (
                   <div
                     key={log.id}
-                    className="rounded-xl border border-white/10 bg-[#161b22] p-4"
+                    className="rounded-xl border border-border bg-muted/50 p-4 transition-colors hover:bg-muted"
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-white break-words">
-                          {log.raw_text || 'Без описания'}
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-foreground line-clamp-2">
+                          {log.raw_text || "Без описания"}
                         </p>
-                        <p className="mt-1 text-xs text-white/45">
-                          {formatDate(log.logged_at)}
-                        </p>
-                        <p className="mt-1 text-xs text-white/35">
-                          source: {log.source || 'manual'}
-                        </p>
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                          <span className="inline-flex items-center gap-1 rounded-md bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">
+                            {log.meal_type || "unknown"}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {formatDate(log.logged_at)}
+                          </span>
+                        </div>
                       </div>
-
                       <div className="shrink-0 text-right">
-                        <p className="text-sm font-semibold text-white">
-                          {log.calories || 0} kcal
+                        <p className="text-sm font-bold text-foreground">
+                          {log.calories || 0}
                         </p>
-                        <p className="mt-1 text-xs text-white/45">
-                          {log.meal_type || 'unknown'}
-                        </p>
+                        <p className="text-xs text-muted-foreground">kcal</p>
                       </div>
                     </div>
 
-                    <div className="mt-3 flex flex-wrap gap-4 text-xs text-white/55">
-                      <span>P: {log.protein ?? 0}</span>
-                      <span>F: {log.fat ?? 0}</span>
-                      <span>C: {log.carbs ?? 0}</span>
+                    <div className="mt-3 flex gap-4 border-t border-border pt-3">
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs text-muted-foreground">P:</span>
+                        <span className="text-xs font-medium text-foreground">
+                          {log.protein ?? 0}g
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs text-muted-foreground">F:</span>
+                        <span className="text-xs font-medium text-foreground">
+                          {log.fat ?? 0}g
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs text-muted-foreground">C:</span>
+                        <span className="text-xs font-medium text-foreground">
+                          {log.carbs ?? 0}g
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))
               )}
             </div>
           </section>
+        </div>
+
+        {/* Quick Action */}
+        <div className="mt-8 rounded-2xl border border-accent/30 bg-accent/5 p-6">
+          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div>
+              <h3 className="text-lg font-semibold text-foreground">
+                Добавить приём пищи
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Отправьте описание еды в Telegram бота для мгновенного анализа
+              </p>
+            </div>
+            <a
+              href="https://t.me/ai_coach_hse_bot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-xl bg-accent px-6 py-3 font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.67-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.74 3.99-1.73 6.65-2.87 7.97-3.43 3.8-1.57 4.59-1.84 5.1-1.85.11 0 .37.03.53.14.14.1.18.23.2.33-.01.06.01.24 0 .38z" />
+              </svg>
+              Открыть Telegram
+            </a>
+          </div>
         </div>
       </div>
     </main>
