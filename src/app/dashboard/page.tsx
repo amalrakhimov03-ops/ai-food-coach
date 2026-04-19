@@ -54,6 +54,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [logs, setLogs] = useState<FoodLog[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -72,6 +73,7 @@ export default function DashboardPage() {
         }
 
         setEmail(user.email || "")
+        setUserId(user.id)
 
         const { data, error: logsError } = await supabase
           .from("food_logs")
@@ -149,7 +151,7 @@ export default function DashboardPage() {
       totalMeals > 0 ? Math.round((totalFat / totalMeals) * 10) / 10 : 0
     const avgCarbs =
       totalMeals > 0 ? Math.round((totalCarbs / totalMeals) * 10) / 10 : 0
-
+    
     return {
       totalMeals,
       todayCalories,
@@ -160,6 +162,10 @@ export default function DashboardPage() {
       avgCarbs,
     }
   }, [logs])
+  
+  const botLink = userId 
+  ? `https://t.me/ai_coach_hse_bot?start=${userId}` 
+  : "https://t.me/ai_coach_hse_bot"
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -459,7 +465,7 @@ export default function DashboardPage() {
                     У вас пока нет записей
                   </p>
                   <a
-                    href="https://t.me/ai_coach_hse_bot"
+                    href={botLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-accent hover:text-accent/80"
@@ -618,7 +624,7 @@ export default function DashboardPage() {
               </p>
             </div>
             <a
-              href="https://t.me/ai_coach_hse_bot"
+              href={botLink} 
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 rounded-xl bg-accent px-6 py-3 font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
