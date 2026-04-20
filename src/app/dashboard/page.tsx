@@ -55,7 +55,6 @@ function CaloriesBarChart({
   averageCalories: number
 }) {
   const maxCalories = Math.max(...data.map((d) => d.calories), averageCalories, 1)
-  // Round up to nearest 500 for a clean Y axis
   const yMax = Math.ceil(maxCalories / 500) * 500
   const yTicks = [0, Math.round(yMax / 2), yMax]
 
@@ -64,7 +63,6 @@ function CaloriesBarChart({
   return (
     <div className="select-none">
       <div className="flex gap-3">
-        {/* Y-axis labels */}
         <div className="flex w-10 flex-col justify-between pb-7 text-right">
           {[...yTicks].reverse().map((tick) => (
             <span key={tick} className="text-[10px] leading-none text-muted-foreground">
@@ -73,11 +71,8 @@ function CaloriesBarChart({
           ))}
         </div>
 
-        {/* Chart area */}
         <div className="flex flex-1 flex-col gap-1">
-          {/* Bars */}
           <div className="relative flex h-32 items-end gap-1.5">
-            {/* Average line */}
             <div
               className="pointer-events-none absolute inset-x-0 border-t border-dashed border-blue-400/60"
               style={{ bottom: `${(averageCalories / yMax) * 100}%` }}
@@ -96,7 +91,6 @@ function CaloriesBarChart({
                   className="group relative flex flex-1 flex-col items-center justify-end"
                   style={{ height: "100%" }}
                 >
-                  {/* Tooltip */}
                   <div className="pointer-events-none absolute bottom-full mb-2 hidden -translate-x-1/2 left-1/2 z-10 rounded-lg border border-border bg-card px-2.5 py-1.5 shadow-lg group-hover:block whitespace-nowrap">
                     <p className="text-xs font-semibold text-foreground">{item.calories} kcal</p>
                     <p className="text-[10px] text-muted-foreground">{formatDayLabel(item.date)}</p>
@@ -115,7 +109,6 @@ function CaloriesBarChart({
             })}
           </div>
 
-          {/* X-axis labels */}
           <div className="flex gap-1.5">
             {data.map((item) => {
               const isToday = item.date === todayKey
@@ -138,7 +131,6 @@ function CaloriesBarChart({
         </div>
       </div>
 
-      {/* Legend */}
       <div className="mt-3 flex items-center gap-4 pl-13">
         <div className="flex items-center gap-1.5">
           <div className="h-2.5 w-2.5 rounded-sm bg-accent" />
@@ -169,73 +161,99 @@ function MacroPieChart({
   const total = protein + fat + carbs
   const hasData = total > 0
 
-  // Calculate angles for pie segments
-  const proteinAngle = hasData ? (protein / total) * 360 : 0
-  const fatAngle = hasData ? (fat / total) * 360 : 0
-  const carbsAngle = hasData ? (carbs / total) * 360 : 0
-
-  // SVG arc path helper
-  const describeArc = (startAngle: number, endAngle: number) => {
-    const start = polarToCartesian(50, 50, 40, endAngle)
-    const end = polarToCartesian(50, 50, 40, startAngle)
-    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1"
-    return `M 50 50 L ${start.x} ${start.y} A 40 40 0 ${largeArcFlag} 0 ${end.x} ${end.y} Z`
-  }
-
-  function polarToCartesian(cx: number, cy: number, r: number, angle: number) {
-    const rad = ((angle - 90) * Math.PI) / 180
-    return {
-      x: cx + r * Math.cos(rad),
-      y: cy + r * Math.sin(rad),
-    }
-  }
+  const circ = 251.3
+  const pPct = hasData ? (protein / total) * 100 : 0
+  const fPct = hasData ? (fat / total) * 100 : 0
+  const cPct = hasData ? (carbs / total) * 100 : 0
+  const gap = 2
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative h-28 w-28">
+      <div className="relative h-48 w-48">
         <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
-          {hasData ? (
+          <circle
+            cx="50"
+            cy="50"
+            r="40"
+            fill="transparent"
+            stroke="currentColor"
+            strokeWidth="8"
+            className="text-muted-foreground/10"
+          />
+          
+          {hasData && (
             <>
-              <path
-                d={describeArc(0, proteinAngle)}
-                fill="#22c55e"
-                className="transition-all duration-500"
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#22c55e"
+                strokeWidth="9"
+                strokeDasharray={`${(pPct * circ) / 100 - gap} ${circ}`}
+                strokeDashoffset={0}
+                strokeLinecap="round"
+                className="drop-shadow-[0_0_8px_rgba(34,197,94,0.4)] transition-all duration-700"
               />
-              <path
-                d={describeArc(proteinAngle, proteinAngle + fatAngle)}
-                fill="#f97316"
-                className="transition-all duration-500"
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#f97316"
+                strokeWidth="9"
+                strokeDasharray={`${(fPct * circ) / 100 - gap} ${circ}`}
+                strokeDashoffset={`-${(pPct * circ) / 100}`}
+                strokeLinecap="round"
+                className="drop-shadow-[0_0_8px_rgba(249,115,22,0.4)] transition-all duration-700"
               />
-              <path
-                d={describeArc(proteinAngle + fatAngle, proteinAngle + fatAngle + carbsAngle)}
-                fill="#3b82f6"
-                className="transition-all duration-500"
+              <circle
+                cx="50"
+                cy="50"
+                r="40"
+                fill="transparent"
+                stroke="#3b82f6"
+                strokeWidth="9"
+                strokeDasharray={`${(cPct * circ) / 100 - gap} ${circ}`}
+                strokeDashoffset={`-${((pPct + fPct) * circ) / 100}`}
+                strokeLinecap="round"
+                className="drop-shadow-[0_0_8px_rgba(59,130,246,0.4)] transition-all duration-700"
               />
             </>
-          ) : (
-            <circle cx="50" cy="50" r="40" fill="currentColor" className="text-muted-foreground/20" />
           )}
         </svg>
-        {/* Center text */}
+
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-lg font-bold text-foreground">{total}</span>
-          <span className="text-[10px] text-muted-foreground">г</span>
+          <div className="flex items-baseline gap-0.5">
+            <span className="text-3xl font-bold tracking-tighter text-foreground">
+              {Math.round(total)}
+            </span>
+            <span className="text-sm font-medium text-muted-foreground">г</span>
+          </div>
+          <div className="mt-1 flex items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5">
+            <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+            <span className="text-[10px] font-bold uppercase tracking-wider text-accent">
+              Всего
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Legend */}
-      <div className="mt-4 flex flex-wrap justify-center gap-4">
-        <div className="flex items-center gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-sm bg-green-500" />
-          <span className="text-[11px] text-muted-foreground">Белок {protein}г</span>
+      <div className="mt-8 grid w-full grid-cols-3 gap-3">
+        <div className="flex flex-col items-center rounded-2xl border border-border bg-muted/30 p-3 text-center">
+          <div className="h-1.5 w-6 rounded-full bg-green-500 mb-2" />
+          <span className="text-lg font-bold text-foreground">{Math.round(protein)}г</span>
+          <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Белок</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-sm bg-orange-500" />
-          <span className="text-[11px] text-muted-foreground">Жиры {fat}г</span>
+        <div className="flex flex-col items-center rounded-2xl border border-border bg-muted/30 p-3 text-center">
+          <div className="h-1.5 w-6 rounded-full bg-orange-500 mb-2" />
+          <span className="text-lg font-bold text-foreground">{Math.round(fat)}г</span>
+          <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Жиры</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="h-2.5 w-2.5 rounded-sm bg-blue-500" />
-          <span className="text-[11px] text-muted-foreground">Углеводы {carbs}г</span>
+        <div className="flex flex-col items-center rounded-2xl border border-border bg-muted/30 p-3 text-center">
+          <div className="h-1.5 w-6 rounded-full bg-blue-500 mb-2" />
+          <span className="text-lg font-bold text-foreground">{Math.round(carbs)}г</span>
+          <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Углеводы</span>
         </div>
       </div>
     </div>
@@ -299,9 +317,7 @@ export default function DashboardPage() {
 
   const stats = useMemo(() => {
     const totalMeals = logs.length
-
     const todayKey = getDayKey(new Date().toISOString())
-
     const caloriesByDayMap = new Map<string, number>()
 
     for (const log of logs) {
@@ -347,7 +363,6 @@ export default function DashboardPage() {
     const avgCarbs =
       totalMeals > 0 ? Math.round((totalCarbs / totalMeals) * 10) / 10 : 0
 
-    // Today's macros
     const todayLogs = logs.filter((log) => getDayKey(log.logged_at) === todayKey)
     const todayProtein = todayLogs.reduce((sum, log) => sum + Number(log.protein || 0), 0)
     const todayFat = todayLogs.reduce((sum, log) => sum + Number(log.fat || 0), 0)
@@ -407,7 +422,6 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Header */}
       <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
@@ -475,7 +489,6 @@ export default function DashboardPage() {
       </header>
 
       <div className="mx-auto max-w-7xl px-6 py-8">
-        {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight text-foreground">
             Добро пожаловать
@@ -506,7 +519,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Stats Grid */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
             <div className="flex items-center justify-between">
@@ -630,9 +642,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Main Content Grid */}
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          {/* Calories History */}
           <section className="rounded-2xl border border-border bg-card p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -709,7 +719,6 @@ export default function DashboardPage() {
               )}
             </div>
 
-            {/* Macro Pie Chart - only show if there are today's logs */}
             {stats.todayProtein + stats.todayFat + stats.todayCarbs > 0 && (
               <div className="mt-6 border-t border-border pt-6">
                 <h3 className="mb-4 text-sm font-medium text-muted-foreground">
@@ -724,7 +733,6 @@ export default function DashboardPage() {
             )}
           </section>
 
-          {/* Recent Activity */}
           <section className="rounded-2xl border border-border bg-card p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -827,7 +835,6 @@ export default function DashboardPage() {
           </section>
         </div>
 
-        {/* Quick Action */}
         <div className="mt-8 rounded-2xl border border-accent/30 bg-accent/5 p-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <div>
