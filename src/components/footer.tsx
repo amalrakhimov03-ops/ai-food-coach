@@ -2,12 +2,12 @@ import Link from "next/link"
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-card">
-      <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid gap-8 md:grid-cols-4">
+    <footer className="border-t border-border/60 bg-card/30">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid gap-12 md:grid-cols-4">
           <div className="md:col-span-2">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent transition-all duration-300 group-hover:shadow-lg group-hover:shadow-accent/25">
                 <svg
                   className="h-5 w-5 text-accent-foreground"
                   fill="none"
@@ -24,26 +24,26 @@ export function Footer() {
               </div>
               <span className="text-lg font-semibold text-foreground">AI Food Coach</span>
             </Link>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-muted-foreground">
               Персональный AI-ассистент для контроля питания. Отправляй еду текстом или голосом, получай мгновенный анализ и рекомендации.
             </p>
           </div>
 
           <div>
             <h4 className="text-sm font-semibold text-foreground">Продукт</h4>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-5 space-y-4">
               <li>
-                <a href="#features" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <a href="#features" className="text-sm text-muted-foreground transition-colors hover:text-accent">
                   Возможности
                 </a>
               </li>
               <li>
-                <a href="#how-it-works" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <a href="#how-it-works" className="text-sm text-muted-foreground transition-colors hover:text-accent">
                   Как это работает
                 </a>
               </li>
               <li>
-                <a href="#stats" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <a href="#stats" className="text-sm text-muted-foreground transition-colors hover:text-accent">
                   Статистика
                 </a>
               </li>
@@ -52,19 +52,19 @@ export function Footer() {
 
           <div>
             <h4 className="text-sm font-semibold text-foreground">Связь</h4>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-5 space-y-4">
               <li>
                 <a
                   href="https://t.me/ai_coach_hse_bot"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-muted-foreground transition-colors hover:text-accent"
                 >
                   Telegram Bot
                 </a>
               </li>
               <li>
-                <Link href="/login" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                <Link href="/login" className="text-sm text-muted-foreground transition-colors hover:text-accent">
                   Web App
                 </Link>
               </li>
@@ -72,7 +72,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 md:flex-row">
+        <div className="mt-16 flex flex-col items-center justify-between gap-6 border-t border-border/60 pt-8 md:flex-row">
           <p className="text-sm text-muted-foreground">
             2024 AI Food Coach. Все права защищены.
           </p>
@@ -81,7 +81,7 @@ export function Footer() {
               href="https://t.me/ai_coach_hse_bot"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-border/60 text-muted-foreground transition-all hover:bg-[#229ED9]/10 hover:border-[#229ED9]/30 hover:text-[#229ED9]"
               aria-label="Telegram"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">

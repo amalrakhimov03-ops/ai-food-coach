@@ -36,16 +36,16 @@ export default function RegisterPage() {
   return (
     <main className="relative flex min-h-screen items-center justify-center bg-background px-6 py-12">
       {/* Background decorations */}
-      <div className="absolute inset-0 bg-grid opacity-30" />
+      <div className="absolute inset-0 bg-grid opacity-20" />
       <div className="absolute inset-0 bg-radial-gradient" />
-      <div className="absolute top-1/3 right-1/4 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
-      <div className="absolute bottom-1/3 left-1/4 h-64 w-64 rounded-full bg-accent/5 blur-3xl" />
+      <div className="absolute top-1/3 right-1/4 h-80 w-80 rounded-full bg-accent/8 blur-[100px]" />
+      <div className="absolute bottom-1/3 left-1/4 h-80 w-80 rounded-full bg-accent/5 blur-[100px]" />
 
       <div className="relative w-full max-w-md animate-fade-in">
         {/* Logo */}
-        <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent">
+        <div className="mb-10 text-center">
+          <Link href="/" className="inline-flex items-center gap-2.5 group">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent transition-all duration-300 group-hover:shadow-lg group-hover:shadow-accent/25">
               <svg
                 className="h-5 w-5 text-accent-foreground"
                 fill="none"
@@ -65,7 +65,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-xl glow-accent">
+        <div className="rounded-3xl border border-border/60 bg-card/80 p-8 shadow-2xl shadow-accent/5">
           <div className="text-center">
             <h1 className="text-2xl font-bold tracking-tight text-foreground">
               Создать аккаунт
@@ -79,7 +79,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 block text-sm font-medium text-foreground"
+                className="mb-2.5 block text-sm font-medium text-foreground"
               >
                 Email
               </label>
@@ -87,7 +87,7 @@ export default function RegisterPage() {
                 id="email"
                 type="email"
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-border bg-muted px-4 py-3 text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus:ring-1 focus:ring-accent"
+                className="w-full rounded-xl border border-border/60 bg-muted/50 px-4 py-3.5 text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-accent focus:ring-2 focus:ring-accent/20 focus:bg-muted"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -97,7 +97,7 @@ export default function RegisterPage() {
             <div>
               <label
                 htmlFor="password"
-                className="mb-2 block text-sm font-medium text-foreground"
+                className="mb-2.5 block text-sm font-medium text-foreground"
               >
                 Пароль
               </label>
@@ -105,19 +105,19 @@ export default function RegisterPage() {
                 id="password"
                 type="password"
                 placeholder="Минимум 6 символов"
-                className="w-full rounded-xl border border-border bg-muted px-4 py-3 text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-accent focus:ring-1 focus:ring-accent"
+                className="w-full rounded-xl border border-border/60 bg-muted/50 px-4 py-3.5 text-foreground outline-none transition-all placeholder:text-muted-foreground focus:border-accent focus:ring-2 focus:ring-accent/20 focus:bg-muted"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
               />
-              <p className="mt-2 text-xs text-muted-foreground">
+              <p className="mt-2.5 text-xs text-muted-foreground">
                 Используйте минимум 6 символов
               </p>
             </div>
 
             {error && (
-              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3.5 text-sm text-red-400">
                 {error}
               </div>
             )}
@@ -125,7 +125,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-accent px-4 py-3.5 font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20 disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-xl bg-accent px-4 py-4 font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/25 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -160,12 +160,12 @@ export default function RegisterPage() {
             </p>
           </form>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 pt-6 border-t border-border/60 text-center">
             <p className="text-sm text-muted-foreground">
               Уже есть аккаунт?{" "}
               <Link
                 href="/login"
-                className="font-medium text-accent transition-colors hover:text-accent/80"
+                className="font-semibold text-accent transition-colors hover:text-accent/80"
               >
                 Войти
               </Link>
@@ -174,10 +174,10 @@ export default function RegisterPage() {
         </div>
 
         {/* Back to home */}
-        <div className="mt-8 text-center">
+        <div className="mt-10 text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-accent"
           >
             <svg
               className="h-4 w-4"

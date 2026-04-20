@@ -19,17 +19,17 @@ export default function HomePage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-32">
-        <div className="absolute inset-0 bg-grid opacity-50" />
+      <section className="relative overflow-hidden pt-32 pb-24 md:pt-44 md:pb-36">
+        <div className="absolute inset-0 bg-grid opacity-40" />
         <div className="absolute inset-0 bg-radial-gradient" />
         
         {/* Decorative elements */}
-        <div className="absolute top-1/4 left-10 h-72 w-72 rounded-full bg-accent/10 blur-3xl animate-pulse-glow" />
-        <div className="absolute bottom-1/4 right-10 h-96 w-96 rounded-full bg-accent/5 blur-3xl animate-pulse-glow animation-delay-200" />
+        <div className="absolute top-1/4 left-10 h-80 w-80 rounded-full bg-accent/8 blur-[100px] animate-pulse-glow" />
+        <div className="absolute bottom-1/4 right-10 h-96 w-96 rounded-full bg-accent/5 blur-[120px] animate-pulse-glow animation-delay-200" />
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-2 animate-fade-in">
+            <div className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-accent/20 bg-accent/5 px-5 py-2.5 animate-fade-in">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
@@ -37,21 +37,20 @@ export default function HomePage() {
               <span className="text-sm font-medium text-accent">AI-Powered Nutrition Assistant</span>
             </div>
 
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl animate-slide-up">
-              <span className="text-balance">Самый быстрый способ</span>
-              <br />
-              <span className="gradient-text">контролировать питание</span>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl animate-slide-up">
+              <span className="block text-balance">Самый быстрый способ</span>
+              <span className="block gradient-text mt-2">контролировать питание</span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground animate-slide-up animation-delay-100">
+            <p className="mx-auto mt-8 max-w-2xl text-base md:text-lg leading-relaxed text-muted-foreground animate-slide-up animation-delay-100">
               Отправь фото или опиши еду голосом в Telegram. AI мгновенно рассчитает калории, БЖУ и даст персональные рекомендации для достижения твоих целей.
             </p>
 
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row animate-slide-up animation-delay-200">
+            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row animate-slide-up animation-delay-200">
               <Link
                 href="/register"
                 onClick={() => trackEvent('cta_click', { location: 'hero', target: 'register' })}
-                className="group flex items-center gap-2 rounded-xl bg-accent px-6 py-4 text-base font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/20"
+                className="group flex items-center gap-2.5 rounded-2xl bg-accent px-7 py-4 text-base font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-0.5"
               >
                 Начать бесплатно
                 <svg
@@ -70,9 +69,9 @@ export default function HomePage() {
                 onClick={() => trackEvent('cta_click', { location: 'hero', target: 'telegram' })}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-4 text-base font-medium text-foreground transition-all hover:bg-muted hover:border-muted-foreground/30"
+                className="flex items-center gap-2.5 rounded-2xl border border-border bg-card/50 px-7 py-4 text-base font-medium text-foreground transition-all hover:bg-muted hover:border-accent/30 hover:-translate-y-0.5"
               >
-                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="h-5 w-5 text-[#229ED9]" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.67-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.74 3.99-1.73 6.65-2.87 7.97-3.43 3.8-1.57 4.59-1.84 5.1-1.85.11 0 .37.03.53.14.14.1.18.23.2.33-.01.06.01.24 0 .38z" />
                 </svg>
                 Открыть в Telegram
@@ -81,50 +80,50 @@ export default function HomePage() {
           </div>
 
           {/* Hero Image / Preview */}
-          <div className="relative mx-auto mt-16 max-w-5xl animate-slide-up animation-delay-300">
-            <div className="rounded-2xl border border-border bg-card p-2 shadow-2xl glow-accent">
-              <div className="rounded-xl bg-muted p-6 md:p-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="h-3 w-3 rounded-full bg-red-500/60" />
-                  <div className="h-3 w-3 rounded-full bg-yellow-500/60" />
-                  <div className="h-3 w-3 rounded-full bg-green-500/60" />
+          <div className="relative mx-auto mt-20 max-w-5xl animate-slide-up animation-delay-300">
+            <div className="rounded-3xl border border-border/60 bg-card/80 p-3 shadow-2xl shadow-accent/5">
+              <div className="rounded-2xl bg-muted/50 p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-8">
+                  <div className="h-3 w-3 rounded-full bg-red-500/70" />
+                  <div className="h-3 w-3 rounded-full bg-yellow-500/70" />
+                  <div className="h-3 w-3 rounded-full bg-green-500/70" />
                 </div>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="rounded-xl border border-border bg-card p-5">
+                <div className="grid gap-5 md:grid-cols-3">
+                  <div className="rounded-2xl border border-border/60 bg-card p-6 transition-all hover:border-accent/30">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm text-muted-foreground">Сегодня</p>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/20">
-                        <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <p className="text-sm font-medium text-muted-foreground">Сегодня</p>
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/15">
+                        <svg className="h-5 w-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                         </svg>
                       </span>
                     </div>
-                    <p className="mt-3 text-3xl font-bold text-foreground">1,847</p>
-                    <p className="mt-1 text-sm text-muted-foreground">калорий</p>
+                    <p className="mt-4 text-4xl font-bold tracking-tight text-foreground">1,847</p>
+                    <p className="mt-1.5 text-sm text-muted-foreground">калорий</p>
                   </div>
-                  <div className="rounded-xl border border-border bg-card p-5">
+                  <div className="rounded-2xl border border-border/60 bg-card p-6 transition-all hover:border-blue-500/30">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm text-muted-foreground">Белки</p>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/20">
-                        <svg className="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <p className="text-sm font-medium text-muted-foreground">Белки</p>
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/15">
+                        <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </span>
                     </div>
-                    <p className="mt-3 text-3xl font-bold text-foreground">89g</p>
-                    <p className="mt-1 text-sm text-muted-foreground">из 120g цели</p>
+                    <p className="mt-4 text-4xl font-bold tracking-tight text-foreground">89g</p>
+                    <p className="mt-1.5 text-sm text-muted-foreground">из 120g цели</p>
                   </div>
-                  <div className="rounded-xl border border-border bg-card p-5">
+                  <div className="rounded-2xl border border-border/60 bg-card p-6 transition-all hover:border-orange-500/30">
                     <div className="flex items-center justify-between">
-                      <p className="text-sm text-muted-foreground">Приёмы пищи</p>
-                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/20">
-                        <svg className="h-4 w-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <p className="text-sm font-medium text-muted-foreground">Приёмы пищи</p>
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/15">
+                        <svg className="h-5 w-5 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
                       </span>
                     </div>
-                    <p className="mt-3 text-3xl font-bold text-foreground">4</p>
-                    <p className="mt-1 text-sm text-muted-foreground">записи сегодня</p>
+                    <p className="mt-4 text-4xl font-bold tracking-tight text-foreground">4</p>
+                    <p className="mt-1.5 text-sm text-muted-foreground">записи сегодня</p>
                   </div>
                 </div>
               </div>
@@ -134,19 +133,19 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="relative py-24 md:py-32">
+      <section id="features" className="relative py-28 md:py-36">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-accent">Возможности</p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
+            <p className="text-sm font-semibold uppercase tracking-widest text-accent">Возможности</p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance">
               Всё, что нужно для контроля питания
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
+            <p className="mt-5 text-base md:text-lg text-muted-foreground leading-relaxed">
               Мощные инструменты AI для простого и эффективного отслеживания вашего рациона
             </p>
           </div>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-20 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[
               {
                 icon: (
@@ -206,13 +205,13 @@ export default function HomePage() {
             ].map((feature, index) => (
               <div
                 key={feature.title}
-                className="group relative rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5"
+                className="group relative rounded-2xl border border-border/60 bg-card/50 p-7 transition-all duration-300 hover:border-accent/40 hover:bg-card hover:shadow-xl hover:shadow-accent/5 hover:-translate-y-1"
               >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors group-hover:bg-accent group-hover:text-accent-foreground">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent/10 text-accent transition-all duration-300 group-hover:bg-accent group-hover:text-accent-foreground group-hover:scale-110">
                   {feature.icon}
                 </div>
-                <h3 className="mt-5 text-lg font-semibold text-foreground">{feature.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
+                <h3 className="mt-6 text-lg font-semibold text-foreground">{feature.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -220,16 +219,16 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="relative py-24 md:py-32 bg-card">
+      <section id="how-it-works" className="relative py-28 md:py-36 bg-card/50">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-accent">Как это работает</p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
+            <p className="text-sm font-semibold uppercase tracking-widest text-accent">Как это работает</p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance">
               Три простых шага к здоровому питанию
             </h2>
           </div>
 
-          <div className="mt-16 grid gap-8 md:grid-cols-3">
+          <div className="mt-20 grid gap-8 md:grid-cols-3 md:gap-12">
             {[
               {
                 step: "01",
@@ -247,15 +246,15 @@ export default function HomePage() {
                 description: "Мгновенный ответ с анализом и персональными рекомендациями прямо в Telegram.",
               },
             ].map((item, index) => (
-              <div key={item.step} className="relative text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10 text-2xl font-bold text-accent">
+              <div key={item.step} className="relative text-center group">
+                <div className="relative z-10 mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-accent/20 bg-accent/10 text-2xl font-bold text-accent transition-all duration-300 group-hover:bg-accent group-hover:text-accent-foreground group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-accent/20">
                   {item.step}
                 </div>
                 {index < 2 && (
-                  <div className="absolute top-8 left-1/2 hidden h-0.5 w-full bg-border md:block" />
+                  <div className="absolute top-10 left-[calc(50%+40px)] hidden h-px w-[calc(100%-80px)] bg-gradient-to-r from-accent/40 to-transparent md:block" />
                 )}
-                <h3 className="mt-6 text-xl font-semibold text-foreground">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                <h3 className="mt-8 text-xl font-semibold text-foreground">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground max-w-xs mx-auto">{item.description}</p>
               </div>
             ))}
           </div>
@@ -263,17 +262,17 @@ export default function HomePage() {
       </section>
 
       {/* Stats Section */}
-      <section id="stats" className="relative py-24 md:py-32">
-        <div className="absolute inset-0 bg-radial-gradient opacity-50" />
+      <section id="stats" className="relative py-28 md:py-36">
+        <div className="absolute inset-0 bg-radial-gradient opacity-40" />
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-wider text-accent">Статистика</p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
+            <p className="text-sm font-semibold uppercase tracking-widest text-accent">Статистика</p>
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance">
               Цифры, которые говорят сами за себя
             </h2>
           </div>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-20 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { value: "10K+", label: "Пользователей" },
               { value: "500K+", label: "Записей о еде" },
@@ -282,10 +281,10 @@ export default function HomePage() {
             ].map((stat) => (
               <div
                 key={stat.label}
-                className="rounded-2xl border border-border bg-card p-8 text-center transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5"
+                className="group rounded-2xl border border-border/60 bg-card/50 p-8 text-center transition-all duration-300 hover:border-accent/40 hover:bg-card hover:shadow-xl hover:shadow-accent/5 hover:-translate-y-1"
               >
-                <p className="text-4xl font-bold gradient-text">{stat.value}</p>
-                <p className="mt-2 text-sm text-muted-foreground">{stat.label}</p>
+                <p className="text-4xl md:text-5xl font-bold gradient-text transition-transform duration-300 group-hover:scale-105">{stat.value}</p>
+                <p className="mt-3 text-sm font-medium text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -293,20 +292,21 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24 md:py-32 bg-card">
-        <div className="absolute inset-0 bg-grid opacity-30" />
+      <section className="relative py-28 md:py-36 bg-card/50 overflow-hidden">
+        <div className="absolute inset-0 bg-grid opacity-20" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-accent/5 blur-[120px]" />
         <div className="relative mx-auto max-w-4xl px-6 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance">
             Готов взять питание под контроль?
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto mt-6 max-w-2xl text-base md:text-lg text-muted-foreground leading-relaxed">
             Присоединяйся к тысячам пользователей, которые уже используют AI Food Coach для достижения своих целей.
           </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/register"
               onClick={() => trackEvent('cta_click', { location: 'footer', target: 'register' })}
-              className="group flex items-center gap-2 rounded-xl bg-accent px-8 py-4 text-base font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/20"
+              className="group flex items-center gap-2.5 rounded-2xl bg-accent px-8 py-4 text-base font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-0.5"
             >
               Создать аккаунт бесплатно
               <svg
@@ -324,7 +324,7 @@ export default function HomePage() {
               onClick={() => trackEvent('cta_click', { location: 'footer', target: 'telegram' })}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl border border-border px-8 py-4 text-base font-medium text-foreground transition-all hover:bg-muted"
+              className="flex items-center gap-2.5 rounded-2xl border border-border bg-card/50 px-8 py-4 text-base font-medium text-foreground transition-all hover:bg-muted hover:border-accent/30 hover:-translate-y-0.5"
             >
               Попробовать в Telegram
             </a>

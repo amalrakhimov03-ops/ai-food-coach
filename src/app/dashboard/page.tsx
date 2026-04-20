@@ -422,11 +422,11 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-lg">
+      <header className="sticky top-0 z-50 border-b border-border/60 bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent transition-all duration-300 group-hover:shadow-lg group-hover:shadow-accent/25">
                 <svg
                   className="h-5 w-5 text-accent-foreground"
                   fill="none"
@@ -448,8 +448,8 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden items-center gap-2 sm:flex">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/20 text-sm font-medium text-accent">
+            <div className="hidden items-center gap-2.5 sm:flex">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/15 text-sm font-semibold text-accent">
                 {email.charAt(0).toUpperCase()}
               </div>
               <span className="text-sm text-muted-foreground">{email}</span>
@@ -458,7 +458,7 @@ export default function DashboardPage() {
               href={botLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl bg-[#229ED9] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#229ED9]/30 transition-all hover:bg-[#1a8bbf] hover:shadow-lg hover:shadow-[#229ED9]/40 hover:-translate-y-px"
+              className="flex items-center gap-2 rounded-xl bg-[#229ED9] px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-[#229ED9]/25 transition-all hover:bg-[#1a8bbf] hover:shadow-lg hover:shadow-[#229ED9]/35 hover:-translate-y-0.5"
             >
               <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.67-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.74 3.99-1.73 6.65-2.87 7.97-3.43 3.8-1.57 4.59-1.84 5.1-1.85.11 0 .37.03.53.14.14.1.18.23.2.33-.01.06.01.24 0 .38z" />
@@ -467,7 +467,7 @@ export default function DashboardPage() {
             </a>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+              className="flex items-center gap-2 rounded-xl border border-border/60 px-4 py-2.5 text-sm font-medium text-foreground transition-all hover:bg-muted hover:border-accent/30"
             >
               <svg
                 className="h-4 w-4"
@@ -519,15 +519,15 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="group rounded-2xl border border-border/60 bg-card/50 p-6 transition-all duration-300 hover:border-accent/40 hover:bg-card hover:shadow-xl hover:shadow-accent/5 hover:-translate-y-0.5">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-muted-foreground">
                 Сегодня
               </p>
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/20">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 transition-all duration-300 group-hover:bg-accent group-hover:shadow-lg group-hover:shadow-accent/25">
                 <svg
-                  className="h-5 w-5 text-accent"
+                  className="h-5 w-5 text-accent transition-colors duration-300 group-hover:text-accent-foreground"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -541,20 +541,20 @@ export default function DashboardPage() {
                 </svg>
               </span>
             </div>
-            <p className="mt-4 text-3xl font-bold text-foreground">
+            <p className="mt-5 text-4xl font-bold tracking-tight text-foreground">
               {stats.todayCalories}
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">калорий</p>
+            <p className="mt-1.5 text-sm text-muted-foreground">калорий</p>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+          <div className="group rounded-2xl border border-border/60 bg-card/50 p-6 transition-all duration-300 hover:border-blue-500/40 hover:bg-card hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-0.5">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-muted-foreground">
                 Среднее в день
               </p>
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/20">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-500/15 transition-all duration-300 group-hover:bg-blue-500 group-hover:shadow-lg group-hover:shadow-blue-500/25">
                 <svg
-                  className="h-5 w-5 text-blue-400"
+                  className="h-5 w-5 text-blue-400 transition-colors duration-300 group-hover:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -568,20 +568,20 @@ export default function DashboardPage() {
                 </svg>
               </span>
             </div>
-            <p className="mt-4 text-3xl font-bold text-foreground">
+            <p className="mt-5 text-4xl font-bold tracking-tight text-foreground">
               {stats.averageDailyCalories}
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">калорий</p>
+            <p className="mt-1.5 text-sm text-muted-foreground">калорий</p>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+          <div className="group rounded-2xl border border-border/60 bg-card/50 p-6 transition-all duration-300 hover:border-purple-500/40 hover:bg-card hover:shadow-xl hover:shadow-purple-500/5 hover:-translate-y-0.5">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-muted-foreground">
                 Всего записей
               </p>
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/20">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-500/15 transition-all duration-300 group-hover:bg-purple-500 group-hover:shadow-lg group-hover:shadow-purple-500/25">
                 <svg
-                  className="h-5 w-5 text-purple-400"
+                  className="h-5 w-5 text-purple-400 transition-colors duration-300 group-hover:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -595,18 +595,18 @@ export default function DashboardPage() {
                 </svg>
               </span>
             </div>
-            <p className="mt-4 text-3xl font-bold text-foreground">
+            <p className="mt-5 text-4xl font-bold tracking-tight text-foreground">
               {stats.totalMeals}
             </p>
-            <p className="mt-1 text-sm text-muted-foreground">приёмов пищи</p>
+            <p className="mt-1.5 text-sm text-muted-foreground">приёмов пищи</p>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5">
+          <div className="group rounded-2xl border border-border/60 bg-card/50 p-6 transition-all duration-300 hover:border-orange-500/40 hover:bg-card hover:shadow-xl hover:shadow-orange-500/5 hover:-translate-y-0.5">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-muted-foreground">БЖУ</p>
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/20">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-500/15 transition-all duration-300 group-hover:bg-orange-500 group-hover:shadow-lg group-hover:shadow-orange-500/25">
                 <svg
-                  className="h-5 w-5 text-orange-400"
+                  className="h-5 w-5 text-orange-400 transition-colors duration-300 group-hover:text-white"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -625,7 +625,7 @@ export default function DashboardPage() {
                 </svg>
               </span>
             </div>
-            <div className="mt-4 flex items-baseline gap-2">
+            <div className="mt-5 flex items-baseline gap-2">
               <span className="text-lg font-semibold text-foreground">
                 {stats.avgProtein}g
               </span>
@@ -636,14 +636,14 @@ export default function DashboardPage() {
                 {stats.avgCarbs}g
               </span>
             </div>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1.5 text-sm text-muted-foreground">
               среднее на запись
             </p>
           </div>
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <section className="rounded-2xl border border-border bg-card p-6">
+          <section className="rounded-2xl border border-border/60 bg-card/50 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-foreground">
@@ -733,7 +733,7 @@ export default function DashboardPage() {
             )}
           </section>
 
-          <section className="rounded-2xl border border-border bg-card p-6">
+          <section className="rounded-2xl border border-border/60 bg-card/50 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-foreground">
@@ -784,7 +784,7 @@ export default function DashboardPage() {
                 logs.slice(0, 6).map((log) => (
                   <div
                     key={log.id}
-                    className="rounded-xl border border-border bg-muted/50 p-4 transition-colors hover:bg-muted"
+                    className="rounded-xl border border-border/60 bg-muted/30 p-4 transition-all hover:bg-muted/60 hover:border-accent/30"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
@@ -835,13 +835,13 @@ export default function DashboardPage() {
           </section>
         </div>
 
-        <div className="mt-8 rounded-2xl border border-accent/30 bg-accent/5 p-6">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <div className="mt-8 rounded-2xl border border-accent/20 bg-gradient-to-r from-accent/5 to-accent/10 p-7">
+          <div className="flex flex-col items-center justify-between gap-5 sm:flex-row">
             <div>
               <h3 className="text-lg font-semibold text-foreground">
                 Добавить приём пищи
               </h3>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1.5 text-sm text-muted-foreground">
                 Отправьте описание еды в Telegram бота для мгновенного анализа
               </p>
             </div>
@@ -849,7 +849,7 @@ export default function DashboardPage() {
               href={botLink} 
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl bg-accent px-6 py-3 font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-lg hover:shadow-accent/20"
+              className="flex items-center gap-2.5 rounded-xl bg-accent px-7 py-3.5 font-semibold text-accent-foreground transition-all hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-0.5"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.67-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.74 3.99-1.73 6.65-2.87 7.97-3.43 3.8-1.57 4.59-1.84 5.1-1.85.11 0 .37.03.53.14.14.1.18.23.2.33-.01.06.01.24 0 .38z" />
