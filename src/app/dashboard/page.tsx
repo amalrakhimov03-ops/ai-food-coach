@@ -47,6 +47,116 @@ function formatDayLabel(dayKey: string) {
   return `${day}.${month}.${year}`
 }
 
+function CaloriesBarChart({
+  data,
+  averageCalories,
+}: {
+  data: { date: string; calories: number }[]
+  averageCalories: number
+}) {
+  const maxCalories = Math.max(...data.map((d) => d.calories), averageCalories, 1)
+  // Round up to nearest 500 for a clean Y axis
+  const yMax = Math.ceil(maxCalories / 500) * 500
+  const yTicks = [0, Math.round(yMax / 2), yMax]
+
+  const todayKey = getDayKey(new Date().toISOString())
+
+  return (
+    <div className="select-none">
+      <div className="flex gap-3">
+        {/* Y-axis labels */}
+        <div className="flex w-10 flex-col justify-between pb-7 text-right">
+          {[...yTicks].reverse().map((tick) => (
+            <span key={tick} className="text-[10px] leading-none text-muted-foreground">
+              {tick >= 1000 ? `${tick / 1000}k` : tick}
+            </span>
+          ))}
+        </div>
+
+        {/* Chart area */}
+        <div className="flex flex-1 flex-col gap-1">
+          {/* Bars */}
+          <div className="relative flex h-44 items-end gap-1.5">
+            {/* Average line */}
+            <div
+              className="pointer-events-none absolute inset-x-0 border-t border-dashed border-blue-400/60"
+              style={{ bottom: `${(averageCalories / yMax) * 100}%` }}
+            >
+              <span className="absolute right-0 -translate-y-full rounded bg-blue-500/20 px-1 py-0.5 text-[9px] font-medium text-blue-400">
+                avg
+              </span>
+            </div>
+
+            {data.map((item) => {
+              const heightPct = (item.calories / yMax) * 100
+              const isToday = item.date === todayKey
+              return (
+                <div
+                  key={item.date}
+                  className="group relative flex flex-1 flex-col items-center justify-end"
+                  style={{ height: "100%" }}
+                >
+                  {/* Tooltip */}
+                  <div className="pointer-events-none absolute bottom-full mb-2 hidden -translate-x-1/2 left-1/2 z-10 rounded-lg border border-border bg-card px-2.5 py-1.5 shadow-lg group-hover:block whitespace-nowrap">
+                    <p className="text-xs font-semibold text-foreground">{item.calories} kcal</p>
+                    <p className="text-[10px] text-muted-foreground">{formatDayLabel(item.date)}</p>
+                  </div>
+
+                  <div
+                    className={`w-full rounded-t-md transition-all duration-500 ease-out hover:brightness-110 ${
+                      isToday
+                        ? "bg-accent shadow-sm shadow-accent/30"
+                        : "bg-accent/40 hover:bg-accent/60"
+                    }`}
+                    style={{ height: `${heightPct}%`, minHeight: heightPct > 0 ? "4px" : "0" }}
+                  />
+                </div>
+              )
+            })}
+          </div>
+
+          {/* X-axis labels */}
+          <div className="flex gap-1.5">
+            {data.map((item) => {
+              const isToday = item.date === todayKey
+              const [, month, day] = item.date.split("-")
+              return (
+                <div key={item.date} className="flex flex-1 justify-center">
+                  <span
+                    className={`text-[10px] leading-none ${
+                      isToday
+                        ? "font-semibold text-accent"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    {`${day}.${month}`}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="mt-3 flex items-center gap-4 pl-13">
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-sm bg-accent" />
+          <span className="text-[11px] text-muted-foreground">Сегодня</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-sm bg-accent/40" />
+          <span className="text-[11px] text-muted-foreground">Прошлые дни</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-px w-4 border-t border-dashed border-blue-400/60" />
+          <span className="text-[11px] text-muted-foreground">Среднее</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function DashboardPage() {
   const router = useRouter()
 
@@ -229,24 +339,24 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          <div className="flex items-center gap-4">
-            <a
-              href={botLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-            >
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.696.065-1.225-.46-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-              </svg>
-              <span className="hidden sm:inline">Привязать Telegram</span>
-            </a>
+          <div className="flex items-center gap-3">
             <div className="hidden items-center gap-2 sm:flex">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/20 text-sm font-medium text-accent">
                 {email.charAt(0).toUpperCase()}
               </div>
               <span className="text-sm text-muted-foreground">{email}</span>
             </div>
+            <a
+              href={botLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-xl bg-[#229ED9] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-[#229ED9]/30 transition-all hover:bg-[#1a8bbf] hover:shadow-lg hover:shadow-[#229ED9]/40 hover:-translate-y-px"
+            >
+              <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.67-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.42-.88.03-.24.37-.49 1.02-.74 3.99-1.73 6.65-2.87 7.97-3.43 3.8-1.57 4.59-1.84 5.1-1.85.11 0 .37.03.53.14.14.1.18.23.2.33-.01.06.01.24 0 .38z" />
+              </svg>
+              <span className="hidden sm:inline">Telegram</span>
+            </a>
             <button
               onClick={handleLogout}
               className="flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
@@ -456,7 +566,7 @@ export default function DashboardPage() {
               </span>
             </div>
 
-            <div className="mt-6 space-y-3">
+            <div className="mt-6">
               {stats.caloriesHistory.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border p-6 text-center">
                   <svg
@@ -498,24 +608,10 @@ export default function DashboardPage() {
                   </a>
                 </div>
               ) : (
-                stats.caloriesHistory.map((item, index) => (
-                  <div
-                    key={item.date}
-                    className="flex items-center justify-between rounded-xl border border-border bg-muted/50 px-4 py-3 transition-colors hover:bg-muted"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-xs font-medium text-accent">
-                        {index + 1}
-                      </span>
-                      <span className="text-sm text-foreground">
-                        {formatDayLabel(item.date)}
-                      </span>
-                    </div>
-                    <span className="text-sm font-semibold text-foreground">
-                      {item.calories} kcal
-                    </span>
-                  </div>
-                ))
+                <CaloriesBarChart
+                  data={[...stats.caloriesHistory].reverse()}
+                  averageCalories={stats.averageDailyCalories}
+                />
               )}
             </div>
           </section>
