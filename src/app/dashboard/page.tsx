@@ -76,7 +76,7 @@ function CaloriesBarChart({
         {/* Chart area */}
         <div className="flex flex-1 flex-col gap-1">
           {/* Bars */}
-          <div className="relative flex h-44 items-end gap-1.5">
+          <div className="relative flex h-32 items-end gap-1.5">
             {/* Average line */}
             <div
               className="pointer-events-none absolute inset-x-0 border-t border-dashed border-blue-400/60"
@@ -151,6 +151,91 @@ function CaloriesBarChart({
         <div className="flex items-center gap-1.5">
           <div className="h-px w-4 border-t border-dashed border-blue-400/60" />
           <span className="text-[11px] text-muted-foreground">Среднее</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MacroPieChart({
+  protein,
+  fat,
+  carbs,
+}: {
+  protein: number
+  fat: number
+  carbs: number
+}) {
+  const total = protein + fat + carbs
+  const hasData = total > 0
+
+  // Calculate angles for pie segments
+  const proteinAngle = hasData ? (protein / total) * 360 : 0
+  const fatAngle = hasData ? (fat / total) * 360 : 0
+  const carbsAngle = hasData ? (carbs / total) * 360 : 0
+
+  // SVG arc path helper
+  const describeArc = (startAngle: number, endAngle: number) => {
+    const start = polarToCartesian(50, 50, 40, endAngle)
+    const end = polarToCartesian(50, 50, 40, startAngle)
+    const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1"
+    return `M 50 50 L ${start.x} ${start.y} A 40 40 0 ${largeArcFlag} 0 ${end.x} ${end.y} Z`
+  }
+
+  function polarToCartesian(cx: number, cy: number, r: number, angle: number) {
+    const rad = ((angle - 90) * Math.PI) / 180
+    return {
+      x: cx + r * Math.cos(rad),
+      y: cy + r * Math.sin(rad),
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative h-28 w-28">
+        <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+          {hasData ? (
+            <>
+              <path
+                d={describeArc(0, proteinAngle)}
+                fill="#22c55e"
+                className="transition-all duration-500"
+              />
+              <path
+                d={describeArc(proteinAngle, proteinAngle + fatAngle)}
+                fill="#f97316"
+                className="transition-all duration-500"
+              />
+              <path
+                d={describeArc(proteinAngle + fatAngle, proteinAngle + fatAngle + carbsAngle)}
+                fill="#3b82f6"
+                className="transition-all duration-500"
+              />
+            </>
+          ) : (
+            <circle cx="50" cy="50" r="40" fill="currentColor" className="text-muted-foreground/20" />
+          )}
+        </svg>
+        {/* Center text */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-lg font-bold text-foreground">{total}</span>
+          <span className="text-[10px] text-muted-foreground">г</span>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="mt-4 flex flex-wrap justify-center gap-4">
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-sm bg-green-500" />
+          <span className="text-[11px] text-muted-foreground">Белок {protein}г</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-sm bg-orange-500" />
+          <span className="text-[11px] text-muted-foreground">Жиры {fat}г</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="h-2.5 w-2.5 rounded-sm bg-blue-500" />
+          <span className="text-[11px] text-muted-foreground">Углеводы {carbs}г</span>
         </div>
       </div>
     </div>
@@ -261,6 +346,12 @@ export default function DashboardPage() {
       totalMeals > 0 ? Math.round((totalFat / totalMeals) * 10) / 10 : 0
     const avgCarbs =
       totalMeals > 0 ? Math.round((totalCarbs / totalMeals) * 10) / 10 : 0
+
+    // Today's macros
+    const todayLogs = logs.filter((log) => getDayKey(log.logged_at) === todayKey)
+    const todayProtein = todayLogs.reduce((sum, log) => sum + Number(log.protein || 0), 0)
+    const todayFat = todayLogs.reduce((sum, log) => sum + Number(log.fat || 0), 0)
+    const todayCarbs = todayLogs.reduce((sum, log) => sum + Number(log.carbs || 0), 0)
     
     return {
       totalMeals,
@@ -270,6 +361,9 @@ export default function DashboardPage() {
       avgProtein,
       avgFat,
       avgCarbs,
+      todayProtein,
+      todayFat,
+      todayCarbs,
     }
   }, [logs])
   
@@ -614,6 +708,20 @@ export default function DashboardPage() {
                 />
               )}
             </div>
+
+            {/* Macro Pie Chart - only show if there are today's logs */}
+            {stats.todayProtein + stats.todayFat + stats.todayCarbs > 0 && (
+              <div className="mt-6 border-t border-border pt-6">
+                <h3 className="mb-4 text-sm font-medium text-muted-foreground">
+                  БЖУ за сегодня
+                </h3>
+                <MacroPieChart
+                  protein={stats.todayProtein}
+                  fat={stats.todayFat}
+                  carbs={stats.todayCarbs}
+                />
+              </div>
+            )}
           </section>
 
           {/* Recent Activity */}
